@@ -152,8 +152,44 @@ def profile():
 @app.route('/')
 @login_required
 def home():
-    """Renders the homepage."""
-    return render_template('home.html')
+    """Renders the homepage with a dashboard of task summaries."""
+    dashboard_data = {
+        'overdue': [],
+        'due_today': [],
+        'due_this_week': []
+    }
+    
+    try:
+        cnxn = pyodbc.connect(connection_string)
+        cursor = cnxn.cursor()
+        
+        now = datetime.now()
+        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        today_end = today_start + timedelta(days=1)
+        next_week_end = today_start + timedelta(days=8)
+
+        # Query for Overdue Tasks
+        sql_overdue = "SELECT Id, Title, DueDate FROM dbo.Tasks WHERE UserId = ? AND IsCompleted = 0 AND DueDate < ? ORDER BY DueDate ASC"
+        cursor.execute(sql_overdue, (g.user.Id, today_start))
+        dashboard_data['overdue'] = cursor.fetchall()
+
+        # Query for Tasks Due Today
+        sql_today = "SELECT Id, Title, DueDate FROM dbo.Tasks WHERE UserId = ? AND IsCompleted = 0 AND DueDate >= ? AND DueDate < ? ORDER BY DueDate ASC"
+        cursor.execute(sql_today, (g.user.Id, today_start, today_end))
+        dashboard_data['due_today'] = cursor.fetchall()
+        
+        # Query for Tasks Due in the Next 7 Days, ordered by due date
+        sql_week = "SELECT Id, Title, DueDate FROM dbo.Tasks WHERE UserId = ? AND IsCompleted = 0 AND DueDate >= ? AND DueDate < ? ORDER BY DueDate ASC"
+        cursor.execute(sql_week, (g.user.Id, today_end, next_week_end))
+        dashboard_data['due_this_week'] = cursor.fetchall()
+
+        cursor.close()
+        cnxn.close()
+
+    except pyodbc.Error as ex:
+        flash(f"Database error fetching dashboard data: {ex}", 'error')
+
+    return render_template('home.html', dashboard=dashboard_data)
 
 @app.route('/create')
 @login_required

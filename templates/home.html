@@ -3,88 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task App Home</title>
+    <title>Dashboard</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
             color: #333;
             margin: 0;
-            padding: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #1a73e8;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1a73e8;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            background-color: #e8f0fe;
+        }
+        .nav-links a.logout {
+            color: #dc3545;
+        }
+        .nav-links a.logout:hover {
+            background-color: #f8d7da;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .dashboard-card h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-card h2 .count {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+        
+        .dashboard-card.overdue h2 .count {
+            background-color: #dc3545;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f2f5;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .task-list li:last-child {
+            border-bottom: none;
+        }
+
+        .task-title {
+            font-weight: 500;
+        }
+        
+        .task-due-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .no-tasks-message {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .flashes {
+            list-style: none;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 5px;
             text-align: center;
         }
-        .container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        h1 {
-            color: #007bff;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 20px 0;
-        }
-        .main-link {
-            text-decoration: none;
-            color: #fff;
-            background-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            display: block;
-        }
-        .main-link:hover {
-            background-color: #0056b3;
-        }
-        .logout-link {
-            text-decoration: none;
-            color: #dc3545;
-            font-size: 0.8em; /* Making the text smaller */
-            position: absolute;
-            bottom: 15px;
-            right: 20px;
-        }
-        .logout-link:hover {
-            text-decoration: underline;
-        }
-        .flashes {
-    list-style: none;
-    padding: 15px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 5px;
-    text-align: center;
-}
-.flashes li {
-    margin: 0;
-    padding: 10px;
-    border-radius: 5px;
-}
-.flashes .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-.flashes .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+        .flashes li { margin: 0; padding: 10px; border-radius: 5px; }
+        .flashes .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flashes .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
     </style>
 </head>
-<body>   {% with messages = get_flashed_messages(with_categories=true) %}
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flashes">
                 {% for category, message in messages %}
@@ -93,15 +137,68 @@
             </ul>
         {% endif %}
     {% endwith %}
+
     <div class="container">
-        <h1>Welcome to the Task App!</h1>
-        <p>Choose an action to get started:</p>
-        <ul>
-            <li><a href="/tasks" class="main-link">View All Tasks</a></li>
-            <li><a href="/create" class="main-link">Create a New Task</a></li>
-            <li><a href="/create_pattern" class="main-link">Create a New Recurring Pattern</a></li>
-        </ul>
-        <a href="/logout" class="logout-link">Logout</a>
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('get_tasks') }}">View All Tasks</a>
+                <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card overdue">
+                <h2>
+                    <span>Overdue</span>
+                    <span class="count">{{ dashboard.overdue|length }}</span>
+                </h2>
+                <ul class="task-list">
+                    {% for task in dashboard.overdue %}
+                        <li>
+                            <span class="task-title">{{ task.Title }}</span>
+                            <span class="task-due-date">{{ task.DueDate.strftime('%b %d') }}</span>
+                        </li>
+                    {% else %}
+                        <p class="no-tasks-message">No overdue tasks. Great job!</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="dashboard-card">
+                <h2>
+                    <span>Due Today</span>
+                    <span class="count">{{ dashboard.due_today|length }}</span>
+                </h2>
+                <ul class="task-list">
+                    {% for task in dashboard.due_today %}
+                        <li>
+                            <span class="task-title">{{ task.Title }}</span>
+                            <span class="task-due-date">{{ task.DueDate.strftime('%I:%M %p') }}</span>
+                        </li>
+                    {% else %}
+                        <p class="no-tasks-message">No tasks due today.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="dashboard-card">
+                <h2>
+                    <span>Due Next 7 Days</span>
+                    <span class="count">{{ dashboard.due_this_week|length }}</span>
+                </h2>
+                <ul class="task-list">
+                    {% for task in dashboard.due_this_week %}
+                        <li>
+                            <span class="task-title">{{ task.Title }}</span>
+                            <span class="task-due-date">{{ task.DueDate.strftime('%a, %b %d') }}</span>
+                        </li>
+                    {% else %}
+                        <p class="no-tasks-message">No upcoming tasks for the week.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 </body>
 </html>
