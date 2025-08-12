@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* (The CSS is identical to the register page for a consistent look. 
+             You could put this into a separate CSS file to avoid repetition.) */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        button[type="submit"] {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1a73e8;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #1558b3;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #1a73e8;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: #e8f0fe;
+        }
+        .flashes {
+    list-style: none;
+    padding: 15px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 5px;
+    text-align: center;
+}
+.flashes li {
+    margin: 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.flashes .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+    </style>
+</head>
+<body>   {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <h1>Login</h1>
+        <form action="{{ url_for('login') }}" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div class="nav-links">
+        Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.
+    </div>
+</body>
+</html>
