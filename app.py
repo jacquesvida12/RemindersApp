@@ -551,4 +551,4 @@ def import_tasks():
     return redirect(url_for('get_tasks'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
