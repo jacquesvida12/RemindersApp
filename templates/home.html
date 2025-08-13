@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --background-color: #f0f2f5;
+            --text-color: #333;
+            --container-bg: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --overdue-color: #dc3545;
+            --success-color: #28a745;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
@@ -22,78 +35,106 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         h1 {
-            color: #1a73e8;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 2.8em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #1a73e8;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-weight: 500;
+            color: var(--primary-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 600;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .nav-links a:hover {
-            background-color: #e8f0fe;
+            background-color: #e9e3ff;
         }
         .nav-links a.logout {
-            color: #dc3545;
+            background-color: var(--overdue-color);
+            color: #fff;
         }
         .nav-links a.logout:hover {
-            background-color: #f8d7da;
+            background-color: #c82333;
+        }
+        
+        .profile-link .avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            object-fit: cover;
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
         }
 
         .dashboard-card {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
 
         .dashboard-card h2 {
             margin-top: 0;
             color: #333;
             border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-weight: 600;
         }
         
         .dashboard-card h2 .count {
-            background-color: #1a73e8;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: #fff;
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 5px 15px;
+            border-radius: 15px;
             font-size: 0.8em;
         }
         
         .dashboard-card.overdue h2 .count {
-            background-color: #dc3545;
+            background: var(--overdue-color);
         }
 
         .task-list {
             list-style: none;
             padding: 0;
+            margin-top: 20px;
         }
 
         .task-list li {
-            padding: 10px 0;
+            padding: 15px 0;
             border-bottom: 1px solid #f0f2f5;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
-
         .task-list li:last-child {
             border-bottom: none;
         }
@@ -105,25 +146,28 @@
         .task-due-date {
             color: #666;
             font-size: 0.9em;
+            font-weight: 500;
         }
         
         .no-tasks-message {
             color: #888;
             font-style: italic;
+            padding-top: 15px;
         }
         
         .flashes {
             list-style: none;
             padding: 15px;
             margin: 20px auto;
-            width: 90%;
+            width: 100%;
             max-width: 1200px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: center;
+            font-weight: 500;
         }
-        .flashes li { margin: 0; padding: 10px; border-radius: 5px; }
-        .flashes .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .flashes .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flashes li { color: #fff; padding: 12px; border-radius: 5px; }
+        .flashes .success { background-color: var(--success-color); }
+        .flashes .error { background-color: var(--overdue-color); }
 
     </style>
 </head>
@@ -143,6 +187,10 @@
             <h1>Dashboard</h1>
             <div class="nav-links">
                 <a href="{{ url_for('get_tasks') }}">View All Tasks</a>
+                <a href="{{ url_for('profile') }}" class="profile-link">
+                    <img src="{{ g.user.ProfilePictureUrl or url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-small">
+                    <span>{{ g.user.Username }}</span>
+                </a>
                 <a href="{{ url_for('logout') }}" class="logout">Logout</a>
             </div>
         </div>

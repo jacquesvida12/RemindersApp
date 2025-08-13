@@ -5,49 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recurring Patterns</title>
     <style>
-        /* General Page Styling */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --background-color: #f0f2f5;
+            --text-color: #333;
+            --container-bg: #ffffff;
+            --header-bg: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
-            text-align: center;
         }
         
-        /* Container for content */
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: var(--container-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            color: #1a73e8;
+            color: var(--primary-color);
+            text-align: center;
             margin-bottom: 20px;
-            font-size: 2.5em;
+            font-size: 2.8em;
+            font-weight: 700;
         }
 
-        /* Navigation Links */
         .nav-links {
+            text-align: center;
             margin-bottom: 25px;
         }
         .nav-links a {
             text-decoration: none;
-            color: #1a73e8;
+            color: var(--primary-color);
+            font-weight: 600;
             padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            margin: 0 5px;
         }
         .nav-links a:hover {
-            background-color: #e8f0fe;
+            background-color: #e9e3ff;
         }
-
-        /* Table Styling */
+        .nav-links a.logout {
+            color: var(--error-color);
+        }
+        .nav-links a.logout:hover {
+            background-color: #fce8eA;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -55,73 +73,80 @@
         }
 
         th, td {
-            padding: 15px;
+            padding: 18px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
         
         th {
-            background-color: #1a73e8;
+            background: var(--header-bg);
             color: #fff;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
+        tr {
+            transition: background-color 0.3s;
+        }
         tr:hover {
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
         }
         
-        /* Action Buttons */
         .action-button {
-            padding: 8px 12px;
+            padding: 8px 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             color: white;
             cursor: pointer;
             font-size: 0.9em;
+            font-weight: 600;
             text-decoration: none;
             display: inline-block;
+            transition: transform 0.2s, box-shadow 0.3s;
         }
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
         .delete-button {
-            background-color: #dc3545;
+            background-color: var(--error-color);
         }
         .delete-button:hover {
             background-color: #c82333;
         }
-
-
-        /* Message Styling */
+        
         .no-patterns {
+            text-align: center;
             font-size: 1.2em;
             color: #666;
             margin-top: 30px;
+            padding: 20px;
         }
+        .no-patterns a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
         .flashes {
-    list-style: none;
-    padding: 15px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 5px;
-    text-align: center;
-}
-.flashes li {
-    margin: 0;
-    padding: 10px;
-    border-radius: 5px;
-}
-.flashes .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-.flashes .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+            list-style: none;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            color: #fff;
+        }
+        .flashes li { margin: 0; padding: 10px; border-radius: 5px; }
+        .flashes .success { background-color: var(--success-color); }
+        .flashes .error { background-color: var(--error-color); }
     </style>
 </head>
-<body>   {% with messages = get_flashed_messages(with_categories=true) %}
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flashes">
                 {% for category, message in messages %}
@@ -130,22 +155,24 @@
             </ul>
         {% endif %}
     {% endwith %}
-     <div class="container">
+
+    <div class="container">
         <h1>Recurring Patterns</h1>
         <div class="nav-links">
             <a href="/">Home</a> | 
             <a href="/create">Create a New Task</a> | 
             <a href="/create_pattern">Create a New Pattern</a> |
-            <a href="/logout" style="color: #dc3545;">Logout</a>
+            <a href="/profile">Profile</a> |
+            <a href="/logout" class="logout">Logout</a>
         </div>
-        <hr>
+        
         {% if patterns %}
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Recurring Type</th>
-                        <th>Separation Count</th>
+                        <th>Type</th>
+                        <th>Separation</th>
                         <th>Day of Week</th>
                         <th>Day of Month</th>
                         <th>Start Date</th>
