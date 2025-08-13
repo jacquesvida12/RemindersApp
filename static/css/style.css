@@ -127,6 +127,7 @@ input:focus, select:focus {
     display: flex;
     align-items: center;
     gap: 15px;
+    justify-content: flex-end;
 }
 .nav-links a {
     text-decoration: none;
@@ -425,7 +426,11 @@ body {
 .btn-danger:hover {
     background-color: #c82333;
 }
-
+a.btn-primary,
+a.btn-secondary,
+a.btn-danger {
+    color: #fff !important; /* Use !important to override any conflicting styles */
+}
 /* Neutral/navigation button (Home, Profile, Sample) */
 .btn-neutral {
     background-color: var(--light-grey);

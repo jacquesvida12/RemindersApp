@@ -32,7 +32,7 @@
                         <input type="file" name="file" id="file" accept=".csv" required onchange="document.getElementById('importForm').submit();" style="display: none;">
                     </form>
                     <a href="{{ url_for('static', filename='samples/sample_tasks.csv') }}" class="btn btn-neutral" download>Sample</a>
-                    <a href="{{ url_for('export_tasks', search=search_query, status=status_filter, start_date=start_date_filter, end_date=end_date_filter) }}" class="btn btn-secondary">Export View</a>
+                    <a href="{{ url_for('export_tasks', search=search_query, status=status_filter, start_date=start_date_filter, end_date=end_date_filter) }}" class="btn btn-primary">Export View</a>
                 </div>
 
                 {% if g.user %}
