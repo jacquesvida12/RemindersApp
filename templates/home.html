@@ -4,172 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --overdue-color: #dc3545;
-            --success-color: #28a745;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 2.8em;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--primary-color);
-            padding: 12px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: 600;
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .nav-links a:hover {
-            background-color: #e9e3ff;
-        }
-        .nav-links a.logout {
-            background-color: var(--overdue-color);
-            color: #fff;
-        }
-        .nav-links a.logout:hover {
-            background-color: #c82333;
-        }
-        
-        .profile-link .avatar-small {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-color);
-            object-fit: cover;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .dashboard-card {
-            background-color: var(--container-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .dashboard-card h2 {
-            margin-top: 0;
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        
-        .dashboard-card h2 .count {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 0.8em;
-        }
-        
-        .dashboard-card.overdue h2 .count {
-            background: var(--overdue-color);
-        }
-
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-
-        .task-list li {
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f2f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-list li:last-child {
-            border-bottom: none;
-        }
-
-        .task-title {
-            font-weight: 500;
-        }
-        
-        .task-due-date {
-            color: #666;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-        
-        .no-tasks-message {
-            color: #888;
-            font-style: italic;
-            padding-top: 15px;
-        }
-        
-        .flashes {
-            list-style: none;
-            padding: 15px;
-            margin: 20px auto;
-            width: 100%;
-            max-width: 1200px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-        }
-        .flashes li { color: #fff; padding: 12px; border-radius: 5px; }
-        .flashes .success { background-color: var(--success-color); }
-        .flashes .error { background-color: var(--overdue-color); }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -187,11 +22,18 @@
             <h1>Dashboard</h1>
             <div class="nav-links">
                 <a href="{{ url_for('get_tasks') }}">View All Tasks</a>
-                <a href="{{ url_for('profile') }}" class="profile-link">
-                    <img src="{{ g.user.ProfilePictureUrl or url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-small">
-                    <span>{{ g.user.Username }}</span>
-                </a>
-                <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+                {% if g.user %}
+                <div class="profile-dropdown">
+                    <a href="#" id="profile-toggle" class="profile-link">
+                        <img src="{{ g.user.ProfilePictureUrl or url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-small">
+                        <span>{{ g.user.Username }}</span>
+                    </a>
+                    <div id="profile-menu" class="dropdown-menu">
+                        <a href="{{ url_for('profile') }}">View Profile</a>
+                        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -212,7 +54,6 @@
                     {% endfor %}
                 </ul>
             </div>
-
             <div class="dashboard-card">
                 <h2>
                     <span>Due Today</span>
@@ -229,7 +70,6 @@
                     {% endfor %}
                 </ul>
             </div>
-
             <div class="dashboard-card">
                 <h2>
                     <span>Due Next 7 Days</span>
@@ -248,5 +88,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

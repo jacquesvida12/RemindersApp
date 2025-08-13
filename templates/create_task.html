@@ -4,133 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a New Task</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --input-border: #ddd;
-            --success-color: #28a745;
-            --error-color: #dc3545;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .top-nav {
-            max-width: 600px;
-            margin: 0 auto 20px auto;
-            text-align: center;
-        }
-        
-        .top-nav a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        .top-nav a:hover {
-            background-color: #e9e3ff;
-        }
-        .top-nav a.logout {
-            color: var(--error-color);
-        }
-        .top-nav a.logout:hover {
-            background-color: #fce8eA;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: var(--container-bg);
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        input[type="text"],
-        input[type="datetime-local"],
-        select {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 8px rgba(106, 17, 203, 0.2);
-        }
-
-        button[type="submit"] {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .flashes {
-            list-style: none;
-            padding: 15px;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-            color: #fff;
-        }
-        .flashes li { margin: 0; padding: 10px; border-radius: 5px; }
-        .flashes .success { background-color: var(--success-color); }
-        .flashes .error { background-color: var(--error-color); }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -143,16 +17,16 @@
         {% endif %}
     {% endwith %}
 
-    <div class="top-nav">
-        <a href="/">Home</a> |
-        <a href="/tasks">View All Tasks</a> |
-        <a href="/profile">Profile</a> |
-        <a href="/logout" class="logout">Logout</a>
+    <div class="nav-links" style="text-align: center; margin-bottom: 20px;">
+        <a href="{{ url_for('home') }}">Home</a> |
+        <a href="{{ url_for('get_tasks') }}">View All Tasks</a> |
+        <a href="{{ url_for('profile') }}">Profile</a> |
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
 
-    <div class="container">
+    <div class="container" style="max-width: 600px;">
         <h1>Create a New Task</h1>
-        <form action="/create_task" method="POST">
+        <form action="{{ url_for('create_task') }}" method="POST">
             <label for="title">Task Title:</label>
             <input type="text" id="title" name="title" required>
 
@@ -170,5 +44,6 @@
             <button type="submit">Add Task</button>
         </form>
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

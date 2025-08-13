@@ -4,140 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --input-border: #ddd;
-            --success-color: #28a745;
-            --error-color: #dc3545;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-color);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 420px;
-            background-color: var(--container-bg);
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transform: translateY(0);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.8em;
-            font-weight: 700;
-        }
-        
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 8px rgba(106, 17, 203, 0.2);
-        }
-
-        button[type="submit"] {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
-        }
-        button[type="submit"]:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-links {
-            text-align: center;
-            margin-top: 25px;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: 500;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .flashes {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-            width: 100%;
-            max-width: 420px;
-        }
-        .flashes li {
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-            color: #fff;
-        }
-        .flashes .success {
-            background-color: var(--success-color);
-        }
-        .flashes .error {
-            background-color: var(--error-color);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flashes">
@@ -147,7 +16,8 @@
             </ul>
         {% endif %}
     {% endwith %}
-    <div class="container">
+
+    <div class="container" style="max-width: 420px;">
         <h1>Login</h1>
         <form action="{{ url_for('login') }}" method="POST">
             <label for="username">Username:</label>
@@ -159,8 +29,9 @@
             <button type="submit">Login</button>
         </form>
     </div>
-    <div class="nav-links">
-        Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.
+    <div class="nav-links" style="text-align: center; margin-top: 25px;">
+        <p style="color: #fff;">Don't have an account? <a href="{{ url_for('register') }}" style="color: #fff; font-weight: 500;">Register here</a>.</p>
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

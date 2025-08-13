@@ -4,181 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --header-bg: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            --success-color: #28a745;
-            --error-color: #D92A64;
-            --neutral-bg: #e9ecef;
-            --light-grey: #f8f9fa;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: var(--container-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-size: 2.8em;
-            font-weight: 700;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .nav-links, .import-export-section {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        /* General Button & Link Styling */
-        button, .button-link {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            background-color: #2575fc;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 600;
-            display: inline-block;
-            white-space: nowrap;
-        }
-        button:hover, .button-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-
-        /* Navigation Links (Top Left) */
-        .nav-links a { 
-            color: var(--primary-color); 
-            background-color: transparent;
-            font-weight: 500;
-        }
-        .nav-links a:hover { background-color: #e9e3ff; }
-        .nav-links a.logout { color: var(--error-color); }
-        .nav-links a.logout:hover { background-color: #fce8ea; }
-        
-        /* Import / Export Section (Top Right) */
-        .file-upload-label { /* Import */
-             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        }
-        .export-link { /* Export */
-            background-color: var(--secondary-color);
-        }
-        .export-link:hover {
-            background-color: #1e63d8;
-        }
-        .sample-download { /* Sample */
-             background-color: var(--neutral-bg);
-             color: var(--primary-color);
-             border: 1px solid #ddd;
-        }
-        .sample-download:hover {
-            background-color: #d8dce0;
-        }
-
-        .header-and-filter {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        /* Filter Form */
-        .filter-form { display: flex; gap: 10px; align-items: center; }
-        .filter-form input, .filter-form select {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
-        .filter-form button { background: var(--header-bg); }
-        
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-        }
-        th, td {
-            padding: 18px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            vertical-align: middle;
-        }
-        th {
-            background: var(--header-bg);
-            color: #fff;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        tr.completed { background-color: var(--light-grey); color: #999; }
-        tr.completed .task-title-input { text-decoration: line-through; }
-        tr:hover { background-color: #f1f5f8; }
-
-        .recurring-indicator { font-weight: bold; color: var(--primary-color); }
-
-        /* Form elements within the table */
-        .edit-form, .action-buttons { display: flex; align-items: center; gap: 10px; }
-        .edit-form input[type="text"], .edit-form input[type="datetime-local"] {
-            border: 1px solid #ccc; padding: 8px 12px; border-radius: 5px; font-size: 1em;
-        }
-        .edit-form button, .delete-form button { padding: 8px 15px; }
-        .edit-form button { background: var(--primary-color); }
-        .delete-form button { background-color: var(--error-color); }
-
-        input[type="checkbox"] { transform: scale(1.3); margin-right: 8px; cursor: pointer; }
-        input[type="file"] { display: none; }
-        
-        .no-tasks {
-            text-align: center;
-            font-size: 1.2em;
-            color: #666;
-            margin-top: 40px;
-            padding: 20px;
-        }
-        
-        .flashes { list-style: none; padding: 15px; margin: 20px auto; width: 95%; max-width: 1400px; border-radius: 8px; text-align: center; }
-        .flashes li { color: #fff; padding: 12px; border-radius: 5px; font-weight: 500; }
-        .flashes .success { background-color: var(--success-color); }
-        .flashes .error { background-color: var(--error-color); }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -194,25 +20,39 @@
     <div class="container">
         <div class="top-bar">
             <div class="nav-links">
-                <a href="/" class="button-link">Home</a> 
-                <a href="/create" class="button-link">New Task</a> 
-                <a href="/create_pattern" class="button-link">New Pattern</a>
-                <a href="/profile" class="button-link">Profile</a>
-                <a href="/logout" class="button-link logout">Logout</a> 
+                <a href="{{ url_for('home') }}" class="btn btn-neutral">Home</a>
+                <a href="{{ url_for('create_task') }}" class="btn btn-neutral">New Task</a> 
+                <a href="{{ url_for('create_pattern') }}" class="btn btn-neutral">New Pattern</a>
             </div>
-            <div class="import-export-section">
-                <form action="{{ url_for('import_tasks') }}" method="POST" enctype="multipart/form-data" id="importForm" style="display: inline-block;">
-                    <label for="file" class="button-link file-upload-label">Import CSV</label>
-                    <input type="file" name="file" id="file" accept=".csv" required onchange="document.getElementById('importForm').submit();">
-                </form>
-                <a href="{{ url_for('static', filename='samples/sample_tasks.csv') }}" class="button-link sample-download" download>Sample</a>
-                <a href="{{ url_for('export_tasks', search=search_query, status=status_filter, start_date=start_date_filter, end_date=end_date_filter) }}" class="button-link export-link">Export View</a>
+            
+            <div class="nav-links">
+                <div class="import-export-section" style="display: flex; gap: 15px; align-items: center;">
+                    <form action="{{ url_for('import_tasks') }}" method="POST" enctype="multipart/form-data" id="importForm" style="display: inline-block;">
+                        <label for="file" class="btn btn-primary">Import CSV</label>
+                        <input type="file" name="file" id="file" accept=".csv" required onchange="document.getElementById('importForm').submit();" style="display: none;">
+                    </form>
+                    <a href="{{ url_for('static', filename='samples/sample_tasks.csv') }}" class="btn btn-neutral" download>Sample</a>
+                    <a href="{{ url_for('export_tasks', search=search_query, status=status_filter, start_date=start_date_filter, end_date=end_date_filter) }}" class="btn btn-secondary">Export View</a>
+                </div>
+
+                {% if g.user %}
+                <div class="profile-dropdown">
+                    <a href="#" id="profile-menu-toggle" class="profile-menu-toggle">
+                        <img src="{{ g.user.ProfilePictureUrl or url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-small">
+                        <span>{{ g.user.Username }}</span>
+                    </a>
+                    <div id="profile-menu" class="dropdown-menu">
+                        <a href="{{ url_for('profile') }}">Profile</a>
+                        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 
         <div class="header-and-filter">
             <h1>Task List</h1>
-            <form action="/tasks" method="GET" class="filter-form">
+            <form action="{{ url_for('get_tasks') }}" method="GET" class="filter-form">
                 <input type="text" name="search" placeholder="Search title..." value="{{ search_query }}">
                 <select name="status">
                     <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Statuses</option>
@@ -221,7 +61,7 @@
                 </select>
                 <input type="date" name="start_date" value="{{ start_date_filter }}">
                 <input type="date" name="end_date" value="{{ end_date_filter }}">
-                <button type="submit">Filter</button>
+                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
         
@@ -241,16 +81,15 @@
                     {% for task in tasks %}
                     <tr class="{% if task.IsCompleted %}completed{% endif %}">
                         <td>{{ task.Id }}</td>
-                        <form action="/update_task" method="POST" class="edit-form">
+                        <form action="{{ url_for('update_task') }}" method="POST" class="edit-form" style="flex-direction: row; align-items: center;">
                             <td>
-                                <input type="text" name="title" class="task-title-input" value="{{ task.Title }}" required>
+                                <input type="text" name="title" class="task-title-input" value="{{ task.Title }}" required style="width: 100%; margin-bottom: 0;">
                             </td>
                             <td>
-                                <input type="datetime-local" name="due_date" value="{{ task.DueDate.strftime('%Y-%m-%dT%H:%M') }}" required>
+                                <input type="datetime-local" name="due_date" value="{{ task.DueDate.strftime('%Y-%m-%dT%H:%M') }}" required style="width: auto; margin-bottom: 0;">
                             </td>
                             <td>
-                                <input type="checkbox" name="is_completed" {% if task.IsCompleted %}checked{% endif %} onchange="this.form.submit()">
-                                Done
+                                <input type="checkbox" class="completion-checkbox" data-task-id="{{ task.Id }}" {% if task.IsCompleted %}checked{% endif %}> Done
                             </td>
                             <td>
                                 {% if task.RecurringPatternId %}
@@ -262,11 +101,11 @@
                             <td>
                                 <div class="action-buttons">
                                     <input type="hidden" name="id" value="{{ task.Id }}">
-                                    <button type="submit">Update</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                         </form>
-                                    <form action="/delete_task" method="POST" class="delete-form" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                    <form action="{{ url_for('delete_task') }}" method="POST" class="delete-form" onsubmit="return confirm('Are you sure?');">
                                         <input type="hidden" name="id" value="{{ task.Id }}">
-                                        <button type="submit">Delete</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
                             </td>
@@ -275,9 +114,11 @@
                 </tbody>
             </table>
         {% else %}
-            <p class="no-tasks">No tasks found. Try adjusting your filters or <a href="/create">create a new task</a>.</p>
+            <p class="no-tasks" style="text-align: center; margin-top: 30px; padding: 20px;">
+                No tasks found. Try adjusting your filters or <a href="{{ url_for('create_task') }}">create a new task</a>.
+            </p>
         {% endif %}
-
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

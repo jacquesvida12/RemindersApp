@@ -4,146 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recurring Patterns</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --header-bg: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            --success-color: #28a745;
-            --error-color: #dc3545;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: var(--container-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.8em;
-            font-weight: 700;
-        }
-
-        .nav-links {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-            margin: 0 5px;
-        }
-        .nav-links a:hover {
-            background-color: #e9e3ff;
-        }
-        .nav-links a.logout {
-            color: var(--error-color);
-        }
-        .nav-links a.logout:hover {
-            background-color: #fce8eA;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 18px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            background: var(--header-bg);
-            color: #fff;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        tr {
-            transition: background-color 0.3s;
-        }
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .action-button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s, box-shadow 0.3s;
-        }
-        .action-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-        
-        .delete-button {
-            background-color: var(--error-color);
-        }
-        .delete-button:hover {
-            background-color: #c82333;
-        }
-        
-        .no-patterns {
-            text-align: center;
-            font-size: 1.2em;
-            color: #666;
-            margin-top: 30px;
-            padding: 20px;
-        }
-        .no-patterns a {
-            color: var(--primary-color);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        
-        .flashes {
-            list-style: none;
-            padding: 15px;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 1000px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-            color: #fff;
-        }
-        .flashes li { margin: 0; padding: 10px; border-radius: 5px; }
-        .flashes .success { background-color: var(--success-color); }
-        .flashes .error { background-color: var(--error-color); }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -156,14 +17,14 @@
         {% endif %}
     {% endwith %}
 
-    <div class="container">
+    <div class="container" style="max-width: 1000px;">
         <h1>Recurring Patterns</h1>
-        <div class="nav-links">
-            <a href="/">Home</a> | 
-            <a href="/create">Create a New Task</a> | 
-            <a href="/create_pattern">Create a New Pattern</a> |
-            <a href="/profile">Profile</a> |
-            <a href="/logout" class="logout">Logout</a>
+        <div class="nav-links" style="text-align: center; margin-bottom: 25px;">
+            <a href="{{ url_for('home') }}">Home</a> | 
+            <a href="{{ url_for('create_task') }}">New Task</a> | 
+            <a href="{{ url_for('create_pattern') }}">New Pattern</a> |
+            <a href="{{ url_for('profile') }}">Profile</a> |
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
         </div>
         
         {% if patterns %}
@@ -189,8 +50,8 @@
                         <td>{{ pattern.DayOfMonth or 'N/A' }}</td>
                         <td>{{ pattern.StartDate.strftime('%Y-%m-%d') }}</td>
                         <td>
-                             <form action="{{ url_for('delete_pattern', pattern_id=pattern.Id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this pattern and all its future tasks?');">
-                                <button type="submit" class="action-button delete-button">Delete</button>
+                             <form action="{{ url_for('delete_pattern', pattern_id=pattern.Id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This will delete the pattern and all its future tasks.');">
+                                <button type="submit" class="delete-button">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -198,8 +59,11 @@
                 </tbody>
             </table>
         {% else %}
-            <p class="no-patterns">No recurring patterns found. Please <a href="/create_pattern">create one</a>.</p>
+            <p class="no-patterns" style="text-align: center; margin-top: 30px;">
+                No recurring patterns found. Please <a href="{{ url_for('create_pattern') }}">create one</a>.
+            </p>
         {% endif %}
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
